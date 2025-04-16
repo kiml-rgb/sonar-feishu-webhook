@@ -59,8 +59,10 @@ function buildCard(data) {
     timeZone: 'Asia/Shanghai'
   });
   const dashboardUrl = data.branch.url;
-
   const conditionDetails = formatConditions(data.qualityGate.conditions);
+
+  const isPullRequest = data.branch.type === 'PULL_REQUEST';
+  const branchOrPRName = isPullRequest ? `PR #${data.branch.name}` : `分支 ${data.branch.name}`;
 
   return {
     msg_type: 'interactive',
@@ -85,7 +87,7 @@ function buildCard(data) {
         },
         subtitle: {
           tag: 'plain_text',
-          content: `${project} · PR #${data.branch.name}`
+          content: `${project} · ${branchOrPRName}`
         },
         template: data.qualityGate.status === 'OK' ? 'green' : 'red',
         padding: '12px 12px 12px 12px'
@@ -96,7 +98,7 @@ function buildCard(data) {
         elements: [
           {
             tag: 'markdown',
-            content: `**📌 分析摘要**\n\n- **项目**：${project}\n- **分支类型**：Pull Request\n- **编号**：#${data.branch.name}\n- **提交版本**：${data.revision}\n- **状态**：${status}\n- **分析时间**：${time}\n- **质量门**：${status}`
+            content: `**📌 分析摘要**\n\n- **项目**：${project}\n- **${isPullRequest ? '分支类型' : '分支'}**：${isPullRequest ? 'Pull Request' : data.branch.name}\n- **提交版本**：${data.revision}\n- **状态**：${status}\n- **分析时间**：${time}\n- **质量门**：${status}`
           },
           {
             tag: 'markdown',
