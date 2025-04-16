@@ -55,7 +55,9 @@ function buildCard(data) {
   const project = data.project.name;
   const branch = data.branch.name;
   const status = data.qualityGate.status === 'OK' ? '✅ 通过' : '❌ 不通过';
-  const time = new Date(data.analysedAt).toLocaleString('zh-CN');
+  const time = new Date(data.analysedAt).toLocaleString('zh-CN', {
+    timeZone: 'Asia/Shanghai'
+  });
   const dashboardUrl = data.branch.url;
 
   const conditionDetails = formatConditions(data.qualityGate.conditions);
